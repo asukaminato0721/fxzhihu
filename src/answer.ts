@@ -1,5 +1,5 @@
 import { Question } from "./question";
-import { fixImagesAndLinks, createTemplate, extractReference, FetchError } from "./lib";
+import { fixImagesAndLinks, createTemplate, extractReference, FetchError, getUserName } from "./lib";
 
 export type Answer = {
   content: string;
@@ -9,6 +9,7 @@ export type Answer = {
     url: string;
     headline: string;
     avatar_url: string;
+    id: string;
   };
   voteup_count: number;
   comment_count: number;
@@ -111,7 +112,7 @@ export async function answer(id: string, redirect: boolean, env: Env): Promise<s
     content: await fixImagesAndLinks(data.content),
     reference: await extractReference(data.content),
     excerpt: data.excerpt,
-    author: data.author.name,
+    author: await getUserName(data.author.id, env),
     created_time: createdTime.toISOString(),
     created_time_formatted: createdTime.toDateString(),
     voteup_count: data.voteup_count.toString(),

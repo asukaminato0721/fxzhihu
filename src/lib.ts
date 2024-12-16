@@ -155,3 +155,11 @@ export async function TransformUrl(url: string, env: Env) {
     }).transform(new Response(url)).text();
   // Transform HTML string
 }
+
+export async function getUserName(id: string, env: Env) {
+  const response = await fetch(new URL(id, `https://api.zhihu.com/people/`));
+  if (!response.ok) {
+    return id;
+  }
+  return (await response.json() satisfies { name: string }).name;
+}
